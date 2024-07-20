@@ -6,7 +6,7 @@ import { IModel } from "../utils/IModels";
 @Table
 export class User extends Model implements IModel<UserType> {
     public static TABLE_VAR: string = "users";
-    public static ID_VAR: string = "uuid";
+    public static UUID_VAR: string = "uuid";
     public static EMAIL_VAR: string = "email";
     public static PASSWORD_VAR: string = "password";
     public static ROLE_VAR: string = "role";

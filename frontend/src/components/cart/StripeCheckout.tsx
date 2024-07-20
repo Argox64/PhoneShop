@@ -1,8 +1,6 @@
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import StripeCheckoutForm from './StripeCheckoutForm';
-import { OrderType } from 'common-types';
-import { redirect } from 'react-router-dom';
 
 interface StripeCheckoutProps {
   clientSecret: string;

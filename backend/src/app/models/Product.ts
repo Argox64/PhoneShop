@@ -2,7 +2,7 @@ import { ProductType, VALIDATION_EMAIL_ERROR, VALIDATION_NOT_NULL_ERROR } from "
 import { AllowNull, AutoIncrement, Column, DataType, HasMany, HasOne, Model, PrimaryKey, Table } from "sequelize-typescript";
 import { IModel } from "../utils/IModels";
 import { OrderDetail } from "./OrderDetail";
-import { SalesAggregees } from "./SalesAggregees";
+import { SalesAggregates } from "./SalesAggregates";
 
 @Table
 export class Product extends Model implements IModel<ProductType> {
@@ -59,8 +59,8 @@ export class Product extends Model implements IModel<ProductType> {
   @HasMany(() => OrderDetail)
   orderDetails!: OrderDetail[]
 
-  @HasOne(() => SalesAggregees)
-  salesAggregees!: SalesAggregees;
+  @HasOne(() => SalesAggregates)
+  salesAggregates!: SalesAggregates;
 
   ToType(): ProductType {
     {
@@ -71,7 +71,7 @@ export class Product extends Model implements IModel<ProductType> {
         price: this.price,
         imageUrl: this.imageUrl,
         orderDetails: this.orderDetails?.map(oe => oe.ToType()),
-        salesAggregees: this.salesAggregees?.ToType()
+        salesAggregates: this.salesAggregates?.ToType()
       }
     }
   }

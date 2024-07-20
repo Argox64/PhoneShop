@@ -3,7 +3,7 @@ import { Order } from "./Order";
 import { IModel } from "../utils/IModels";
 import { OrderDetailType, VALIDATION_NOT_NULL_ERROR } from "common-types";
 import { Product } from "./Product";
-import { SalesAggregees } from "./SalesAggregees";
+import { SalesAggregates } from "./SalesAggregates";
 
 @Table
 export class OrderDetail extends Model implements IModel<OrderDetailType> {
@@ -59,28 +59,28 @@ export class OrderDetail extends Model implements IModel<OrderDetailType> {
 
     //Hooks
     @AfterCreate
-    static async UpdateTotalSales(orderDetail: OrderDetail) {
-        const [sale, created] = await SalesAggregees.findOrCreate({
-            where: { product_id: orderDetail.productId }
+    static async UpdateTotalSales(orderDetail: OrderDetail, options: any) {
+        const [sale, created] = await SalesAggregates.findOrCreate({
+            where: { [SalesAggregates.PRODUCT_ID_VAR]: orderDetail.productId }
           });
         
-        sale.total_nb_sales += orderDetail.quantity;
-        await sale.save();
+        sale.totalSales += orderDetail.quantity;
+        await sale.save({transaction: options.transaction});
     }
 
     @AfterUpdate
-    static async UpdateTotalSalesAfterUpdate(orderDetail: OrderDetail) {
+    static async UpdateTotalSalesAfterUpdate(orderDetail: OrderDetail, options: any) {
         const oldQuantite = orderDetail.previous('quantite') as number;
         const newQuantite = orderDetail.quantity;
         
         if (oldQuantite !== newQuantite) {
-            const sale = await SalesAggregees.findOne({
-            where: { product_id: orderDetail.productId },
+            const sale = await SalesAggregates.findOne({
+                where: { [SalesAggregates.PRODUCT_ID_VAR]: orderDetail.productId },
             });
         
             if (sale) {
-                sale.total_nb_sales = sale.total_nb_sales - oldQuantite + newQuantite;
-                await sale.save();
+                sale.totalSales = sale.totalSales - oldQuantite + newQuantite;
+                await sale.save({transaction: options.transaction});
             }
         }
     }
@@ -92,7 +92,7 @@ export class OrderDetail extends Model implements IModel<OrderDetailType> {
             orderId: this.orderId,
             quantity: this.quantity,
             order: this.order?.ToType(),
-            product: this.product.ToType()
+            product: this.product?.ToType()
         }
     }
 }

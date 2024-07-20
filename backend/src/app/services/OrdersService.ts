@@ -25,14 +25,13 @@ export class OrdersService {
         return orders.map(a => a.ToType());
     }
 
-    public getOrder = async(userId: string, orderId: number, includeOrderDetails: boolean = false): Promise<OrderType> => {
+    public getOrder = async(userId: string, orderId: number, includeProducts: boolean = false): Promise<OrderType> => {
         let options : FindOptions = { };
 
-        if(includeOrderDetails) {
-            options.include = [{
-                model: OrderDetail
-            }]
-        }
+        options.include = [{
+            model: OrderDetail,
+            include: includeProducts ? [{ model: Product }] : []
+        }];
 
         let whereOptions : WhereOptions = { id: { [Op.eq] : orderId } };
         options.where = whereOptions;
@@ -63,7 +62,7 @@ export class OrdersService {
                         ...od
                     }
                 });
-                await OrderDetail.bulkCreate(completeOrderDetails, { transaction });
+                await OrderDetail.bulkCreate(completeOrderDetails, { individualHooks: true, transaction });
             }
             else {
                 throw new BadRequestError(INVALID_FIELD_ERROR, { fieldName: "orderDetails" });

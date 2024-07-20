@@ -5,13 +5,13 @@ import { convertAxiosErrorToHttpError } from "../errors/errors";
 import { NewOrderDetail } from "../types/NewOrderDetail";
 
 export class OrderCalls {
-    public static getOrder = async (endPointURL: string, token: string, id: number): Promise<CallResponse<OrderType>> => {
+    public static getOrder = async (endPointURL: string, token: string, id: number, includeProducts: boolean): Promise<CallResponse<OrderType>> => {
         try {
-            const response = await axios.get(`${endPointURL}/orders`, {
+            const response = await axios.get(`${endPointURL}/orders/${id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 },
-                params: { id }
+                params: { includeProducts }
             });
             return { status: response.status, data: response.data };
         } catch (error) {

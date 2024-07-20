@@ -5,18 +5,18 @@ import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
 import { motion } from 'framer-motion';
 import { useSwipeable } from 'react-swipeable';
 import { useNavigate } from 'react-router-dom';
-import { ProductFilter, ProductSort, ProductSortEnum, ProductsSearchData, ProductType } from 'common-types';
+import { ProductSort, ProductsSearchData, ProductType } from 'common-types';
 import ProductsService from '@/services/ProductsService';
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 
-interface PhoneSectionProps {
+interface ProductsSectionProps {
   itemPerPage: number;
   nbPagesPerLoad: number;
   category: string;
   sort: ProductSort;
 }
 
-const ProductSection: React.FC<PhoneSectionProps> = (props) => {
+const ProductsSection: React.FC<ProductsSectionProps> = (props) => {
   const { itemPerPage, nbPagesPerLoad, category, sort } = props;
 
   const [selectedPhonesIndex, setSelectedPhonesIndex] = useState<number>(0);
@@ -183,4 +183,4 @@ const ProductSection: React.FC<PhoneSectionProps> = (props) => {
   );
 };
 
-export default ProductSection;
+export default ProductsSection;

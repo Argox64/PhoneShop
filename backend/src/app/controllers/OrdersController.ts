@@ -54,10 +54,10 @@ export class OrdersController implements IController {
     private getOrder = async(req: express.Request, res: express.Response) => {
         try {
             const { orderId } = req.params;
-            const { includeOrderDetails } = req.query;
+            const { includeProducts } = req.query;
             if(req.session.user) {
                 const { userUID } = req.session.user;
-                const order = await this.ordersService.getOrder(userUID, parseFloat(orderId), Boolean(includeOrderDetails));
+                const order = await this.ordersService.getOrder(userUID, parseFloat(orderId), Boolean(includeProducts));
                 return res.status(200).json(order);
             }
             else

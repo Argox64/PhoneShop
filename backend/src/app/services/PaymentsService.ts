@@ -20,7 +20,7 @@ export class PaymentsService {
     if(!order)
       throw new BadRequestError(INVALID_FIELD_ERROR, { fieldName: "orderId" })
 
-    const user = (await User.findOne({ where : { id : { [Op.eq]: order.userId}}}))?.ToType();
+    const user = (await User.findOne({ where : { [User.UUID_VAR] : { [Op.eq]: order.userId}}}))?.ToType();
     if(!user)
       throw new Error("Something goes wrong. User is invalid.")
 

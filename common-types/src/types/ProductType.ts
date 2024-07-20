@@ -1,5 +1,5 @@
 import { OrderDetailType } from "./OrderDetailType";
-import { SalesAggregeesType } from "./SalesAggregeesType";
+import { SalesAggregatesType } from "./SalesAggregeesType";
 
 export type ProductType = {
     id: number;
@@ -8,5 +8,5 @@ export type ProductType = {
     price:number;
     imageUrl:string
     orderDetails: OrderDetailType[],
-    salesAggregees?: SalesAggregeesType
+    salesAggregates?: SalesAggregatesType
 }

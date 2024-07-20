@@ -1,7 +1,7 @@
 import { FindAndCountOptions, FindOptions, Op, WhereOptions } from "sequelize";
 import { Product } from "../models/Product";
 import { BadRequestError, INVALID_FIELD_ERROR, INVALID_PRICE_RANGE_ERROR, NOT_FOUND_RESSOURCE_ERROR, NotFoundError, ProductFilter, ProductSort, ProductSortEnum, ProductsSearchData, ProductType } from "common-types";
-import { SalesAggregees } from "../models/SalesAggregees";
+import { SalesAggregates } from "../models/SalesAggregates";
 
 export class ProductService {
     public getAllProducts = async (limit: number = 100, offset: number = 0, filter?: ProductFilter, sort?: ProductSort) : Promise<ProductsSearchData> => {
@@ -37,11 +37,11 @@ export class ProductService {
         // Ajout de l'option de tri par nombre de ventes
         if(sort?.by === ProductSortEnum.Sales) {
             options.include = [{
-                model: SalesAggregees,
-                attributes: [SalesAggregees.TOTAL_NB_SALES_VAR]
+                model: SalesAggregates,
+                attributes: [SalesAggregates.TOTAL_SALES_VAR]
             }];
-            //options.order = [[SalesAggregees, SalesAggregees.TOTAL_NB_SALES_VAR, sort.desc ? 'DESC' : 'ASC']];
-            options.order = [[{model : SalesAggregees, as: 'salesAggregees'}, SalesAggregees.TOTAL_NB_SALES_VAR, sort.desc ? 'DESC' : 'ASC']];
+            
+            options.order = [[{model : SalesAggregates, as: 'salesAggregates'}, SalesAggregates.TOTAL_SALES_VAR, sort.desc ? 'DESC' : 'ASC']];
         }
     
         options.limit = limit;

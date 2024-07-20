@@ -4,6 +4,7 @@ import { User } from "./User";
 import { OrderStatus, OrderType, VALIDATION_NOT_NULL_ERROR } from "common-types";
 import { IModel } from "../utils/IModels";
 import {Payment} from "./Payment";
+import { SalesAggregates } from "./SalesAggregates";
 
 @Table
 export class Order extends Model implements IModel<OrderType>{
@@ -11,6 +12,7 @@ export class Order extends Model implements IModel<OrderType>{
     public static ID_VAR: string = "id";
     public static USER_ID_VAR: string = "userId";
     public static STATUS_VAR: string = "status";
+    public static TOTAL_PRICE_VAR: string = "totalPrice"
     public static CREATED_AT: string = "createdAt"
     public static UPDATE_STATUS_AT: string = "updatedStatusAt"
 
@@ -74,6 +76,10 @@ export class Order extends Model implements IModel<OrderType>{
             notNull: {
                 msg: VALIDATION_NOT_NULL_ERROR.key
             }
+        },
+        get(): number {
+            const value = this.getDataValue(Order.TOTAL_PRICE_VAR);
+            return value ? parseFloat(value) : 0;
         }
     })
     totalPrice!: number;

@@ -6,7 +6,7 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import { FAQSection } from "@/components/home/FAQSection";
 import { CarouselComponent } from "@/components/main/CarouselComponent";
-import ProductSection from "@/components/home/ProductSection";
+import ProductsSection from "@/components/home/ProductSection";
 import { useState } from "react";
 import { ProductSortEnum } from "common-types";
 
@@ -47,7 +47,7 @@ export const HomePage: React.FC = () => {
         isMobile={isMobile}
       />
     ))*/}
-    <ProductSection 
+    <ProductsSection 
         category="Meilleures Ventes"
         nbPagesPerLoad={2}
         sort={{ by: ProductSortEnum.Sales, desc: true }}

@@ -4,9 +4,9 @@ import { CallResponse } from 'common-types/src/calls/CallResponse';
 const BASE_URL = (import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000');
 
 class OrdersService {
-  static getOrder = async (token: string, id: number): Promise<CallResponse<OrderType>> => {
+  static getOrder = async (token: string, id: number, includeProducts: boolean): Promise<CallResponse<OrderType>> => {
     try {
-      const response = await OrderCalls.getOrder(BASE_URL, token, id);
+      const response = await OrderCalls.getOrder(BASE_URL, token, id, includeProducts);
       return { status: response.status, data: response.data };
     } catch (error) {
       throw error;

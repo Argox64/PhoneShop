@@ -1,0 +1,20 @@
+{
+    "name": "common-types",
+    "version": "1.0.0",
+    "description": "",
+    "keywords": [],
+    "author": "",
+    "main": "dist/index.js",
+    "scripts": {
+        "build": "rimraf dist && tsc",
+        "delete": "rimraf dist"
+    },
+    "devDependencies": {
+        "typescript": "^5.5.3"
+    },
+    "dependencies": {
+        "axios": "^1.7.2",
+        "rimraf": "^6.0.0"
+    },
+    "module": "index.ts"
+}

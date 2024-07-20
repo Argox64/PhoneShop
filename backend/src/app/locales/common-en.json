@@ -1,0 +1,13 @@
+{
+    "errors": {
+        "invalid-field" : "The field '{{fieldName}}' has invalid value.",
+        "price-range-invalid" : "The '{{fieldName1}}' can't be greater than '{{fieldName2}}'.",
+        "user-already-exists": "An user has already this e-mail '{{value}}'.",
+        "unauthorized-ressource": "You are not authorized to access at this ressource.",
+        "validation": {
+            "isEmail": "The value '{{value}}' in the field '{{fieldName}}' is not an valid e-mail.",
+            "notEmpty": "The field '{{fieldName}}' must not be empty.",
+            "is_null": "The field '{{fieldName}}' is required."
+        }
+    }
+}

@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "es2016",
+    "lib": ["es2017", "dom"],
+    "module": "CommonJS",
+    "declaration": true,
+    "emitDeclarationOnly": false,
+    "strict": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "composite": true,
+    "outDir": "dist",
+  },
+  "include": ["src/**/*.ts", "index.ts"]
+}

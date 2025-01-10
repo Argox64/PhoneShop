@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { BrowserRouter as Router, useNavigate } from 'react-router-dom';
-import { describe, it, expect, vi, MockedFunction } from 'vitest';
+import { describe, it, expect, vi, MockedFunction, beforeEach } from 'vitest';
 import AuthPage from '../pages/AuthPage';
 import AuthentificationService from '../services/AuthenticationService';
 import { useSession } from '@/components/contexts/AuthProvider';

@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { BrowserRouter as Router, useNavigate, useLocation, useParams } from 'react-router-dom';
-import { describe, it, expect, vi, MockedFunction } from 'vitest';
+import { describe, it, expect, vi, MockedFunction, beforeEach } from 'vitest';
 import {Account} from '../pages/Account';
 import OrdersService from '../services/OrdersService';
 import { useSession } from '@/components/contexts/AuthProvider';
@@ -59,7 +59,9 @@ describe('ProfilePage', () => {
         userId: "uuid",
         status: OrderStatus.WaitingForPaiement,
         createdAt: new Date(),
-        orderDetails: [{ product: { id:2, imageUrl: '', name: 'Product 1', description:"", price: 700, orderDetails: [] }, quantity: 1, id: 1, orderId: 1}],
+        orderDetails: [{ product: { id: 2, imageUrl: '', name: 'Product 1', description: "", price: 700, orderDetails: [] }, quantity: 1, id: 1, orderId: 1 }],
+        updatedStatusAt: new Date(),
+        totalPrice: 0
       },
     ];
 

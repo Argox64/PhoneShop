@@ -1,4 +1,4 @@
-import { AppBar, Toolbar, Typography, IconButton, Menu, MenuItem, ListItemIcon, ListItemText, Badge, Link, Box } from '@mui/material';
+import { AppBar, Toolbar, Typography, IconButton, Menu, MenuItem, ListItemIcon, ListItemText, Badge, Link } from '@mui/material';
 import * as React from 'react';
 import { SearchBar } from './SearchBar';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';

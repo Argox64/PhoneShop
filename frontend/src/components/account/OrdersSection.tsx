@@ -8,7 +8,7 @@ import { useLoader } from "../contexts/LoaderProvider";
 // Composant pour afficher les commandes
 export const OrdersSection: React.FC = () => {
     const [orders, setOrders] = useState<OrderType[]>([]);
-    const { user, token, isAuthenticated } = useSession();
+    const { token, isAuthenticated } = useSession();
     const { setLoading } = useLoader();
   
     useEffect(() => {
@@ -16,11 +16,11 @@ export const OrdersSection: React.FC = () => {
       const fetchOrders = async () => {
         if (!isAuthenticated) return;
     
-        const userUUID = user?.userUID ?? "";
+        //const userUUID = user?.userUID ?? "";
         const _token = token ?? "";
     
         try {
-          const ordersResponse = await OrdersService.getOrdersByUser(_token.token, userUUID);
+          const ordersResponse = await OrdersService.getOrdersByUser(_token.token);
           if(orders !== ordersResponse.data)
             setOrders(ordersResponse.data);
         } catch (error) {

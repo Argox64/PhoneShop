@@ -14,7 +14,7 @@ interface OrderSummary extends OrderType {
 const CheckoutComplete: React.FC = () => {
   const navigate = useNavigate();
   const { token, user } = useSession();
-  const { loading, setLoading } = useLoader();
+  const { setLoading } = useLoader();
   const [searchParams] = useSearchParams();
   const [orderSummary, setOrderSummary] = useState<OrderSummary | null>(null);
   const orderId = parseFloat(searchParams.get('orderId') as string);

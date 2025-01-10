@@ -27,9 +27,9 @@ const ProductsSection: React.FC<ProductsSectionProps> = (props) => {
   const isMdOrLess = useMediaQuery(theme.breakpoints.down('md'));
   const navigate = useNavigate();
 
-  const isXs = useMediaQuery(theme.breakpoints.only('xs'));
-  const isMd = useMediaQuery(theme.breakpoints.only('md'));
-  const isLgOrMore = useMediaQuery(theme.breakpoints.up('lg'));
+  //const isXs = useMediaQuery(theme.breakpoints.only('xs'));
+  //const isMd = useMediaQuery(theme.breakpoints.only('md'));
+  //const isLgOrMore = useMediaQuery(theme.breakpoints.up('lg'));
 
   useEffect(() => {
     addProducts(itemPerPage * nbPagesPerLoad - 1);

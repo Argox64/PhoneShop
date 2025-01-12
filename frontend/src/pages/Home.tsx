@@ -11,9 +11,9 @@ import { useState } from "react";
 import { ProductSortEnum } from "common-types";
 
 const promoImages = [
-    "https://via.placeholder.com/800x300?text=Promo+1",
-    "https://via.placeholder.com/800x300?text=Promo+2",
-    "https://via.placeholder.com/800x300?text=Promo+3"
+    "https://placehold.co/800x300?text=Promotion+1",
+    "https://placehold.co/800x300?text=Promotion+2",
+    "https://placehold.co/800x300?text=Promotion+3"
   ];
 
 export const HomePage: React.FC = () => { 

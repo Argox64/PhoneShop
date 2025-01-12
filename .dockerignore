@@ -5,3 +5,5 @@
 /frontend/package-lock.json
 /frontend/.env.example
 /frontend/dist/
+/common-types/dist/
+/common-types/node_modules/

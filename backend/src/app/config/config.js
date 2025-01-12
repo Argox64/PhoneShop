@@ -4,8 +4,8 @@ module.exports = {
   "development": {
     "username": process.env.DB_USER,
     "password": process.env.DB_PASS,
-    "database": `${process.env.DB_NAME}_${process.env.NODE_ENV}`,
-    "host": "127.0.0.1",
+    "database": `${process.env.DB_NAME}_development`,
+    "host": process.env.DB_HOST,
     "dialect": "mysql",
     "define": {
       "timestamps": false
@@ -15,7 +15,7 @@ module.exports = {
     "username": "root",
     "password": null,
     "database": `${process.env.DB_NAME}_${process.env.NODE_ENV}`,
-    "host": "127.0.0.1",
+    "host": process.env.DB_HOST,
     "dialect": "mysql",
     "define": {
       "timestamps": false
@@ -25,7 +25,7 @@ module.exports = {
     "username": "root",
     "password": null,
     "database": process.env.DB_NAME,
-    "host": "127.0.0.1",
+    "host": process.env.DB_HOST,
     "dialect": "mysql",
     "define": {
       "timestamps": false

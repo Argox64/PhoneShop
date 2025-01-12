@@ -1,0 +1,51 @@
+services:
+  mysqldb:
+    container_name: mysql-backend
+    build:
+      context: ./mysql-gettext
+      dockerfile: Dockerfile
+    restart: always
+    env_file: ./.env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASS}
+      MYSQL_DATABASE: ${DB_NAME}
+    ports:
+      - 3306:${DB_PORT}
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      retries: 5
+      start_period: 5s
+      timeout: 5s
+    volumes:
+      - db-config:/etc/mysql
+      - db-data:/var/lib/mysql
+      - ./mysql-gettext/db/backup/files/:/data_backup/data
+  backend:
+    container_name: node-backend
+    env_file: ./.env
+    build:
+      context: ./
+      dockerfile: Dockerfile-back
+    ports:
+      - "5000:5000"
+    depends_on:
+      mysqldb:
+        condition: service_healthy
+  frontend:
+    container_name: vite-frontend
+    build:
+      context: ./
+      dockerfile: Dockerfile-front
+    ports:
+      - "3000:3000"
+    environment:
+      - VITE_BACKEND_URL=http://localhost:5000
+    volumes:
+      - ./frontend:/app/frontend
+    depends_on:
+      - backend
+
+volumes:
+  db-config:
+  db-data:

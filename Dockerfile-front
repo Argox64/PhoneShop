@@ -1,0 +1,18 @@
+# Étape 1 : Base Node.js pour développement
+FROM node:18 AS dev
+
+WORKDIR /app
+
+COPY ./frontend ./frontend
+COPY ./common-types ./common-types
+
+WORKDIR /app/common-types
+RUN npm install
+
+WORKDIR /app/frontend
+RUN apt-get update && apt-get install -y xdg-utils
+RUN npm i
+
+EXPOSE 3000
+
+CMD ["npm", "run", "dev"]

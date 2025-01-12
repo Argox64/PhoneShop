@@ -1,0 +1,7 @@
+/backend/node_modules/
+/backend/dist/
+/backend/.env.example
+/frontend/node_modules/
+/frontend/package-lock.json
+/frontend/.env.example
+/frontend/dist/

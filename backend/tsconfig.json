@@ -1,4 +1,7 @@
 {
+  "ts-node": {
+    "require": ["tsconfig-paths/register"]
+  },
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig to read more about this file */
     "target": "es2016",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
@@ -13,7 +16,9 @@
     "paths": {
       "@/*": ["./src/*"],
       "@app/*": ["./src/app/*"],
-      "@services/*" : ["src/app/services/*"]
+      "@services/*" : ["src/app/services/*"],
+      "common-types": ["../common-types/src"],
+      "common-types/*": ["../common-types/src/*"]
     },
     // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */
     "resolveJsonModule": true,                        /* Enable importing .json files. */

@@ -17,7 +17,6 @@
   "dependencies": {
     "@types/jsonwebtoken": "^9.0.6",
     "bcrypt": "^5.1.1",
-    "common-types": "file:../common-types",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
@@ -49,6 +48,7 @@
     "sequelize-cli": "^6.6.2",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.4.5"
   }
 }

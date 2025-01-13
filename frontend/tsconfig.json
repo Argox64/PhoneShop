@@ -6,7 +6,9 @@
     "module": "ESNext",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "common-types": ["../common-types/src"],
+      "common-types/*": ["../common-types/src/*"]
     },
     "skipLibCheck": true,
 

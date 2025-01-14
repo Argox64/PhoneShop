@@ -1,4 +1,5 @@
 # Shop Test
+A very simple e-commerce website for fun
 
 Notes :
 Use custom docker image for mysql with gettext (install with microdnf)

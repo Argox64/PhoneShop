@@ -1,7 +1,7 @@
 import { FindAndCountOptions, FindOptions, Op, WhereOptions } from "sequelize";
-import { Product } from "../models/Product";
+import { Product } from "@app/models/Product";
 import { BadRequestError, INVALID_FIELD_ERROR, INVALID_PRICE_RANGE_ERROR, NOT_FOUND_RESSOURCE_ERROR, NotFoundError, ProductFilter, ProductSort, ProductSortEnum, ProductsSearchData, ProductType } from "common-types";
-import { SalesAggregates } from "../models/SalesAggregates";
+import { SalesAggregates } from "@app/models/SalesAggregates";
 
 export class ProductService {
     public getAllProducts = async (limit: number = 100, offset: number = 0, filter?: ProductFilter, sort?: ProductSort) : Promise<ProductsSearchData> => {

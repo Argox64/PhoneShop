@@ -3,9 +3,8 @@ import { Request, Response } from 'express';
 import { BadRequestError, OrderStatus } from 'common-types';
 import { StripeService } from './StripeService';
 import Payment from '../models/Payment';
-import { FindOptions, where, WhereOptions } from 'sequelize';
-import { Order } from '../models/Order';
-import sequelize from '../db'
+import { Order } from '@app/models/Order';
+import sequelize from '@app/db'
 
 export class WebhooksService {
   private stripe: Stripe;

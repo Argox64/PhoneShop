@@ -1,9 +1,7 @@
-import express from "express";
+import express, { NextFunction } from "express";
 import { IController } from "./IController";
-import { convertErrorToHttpResponse } from "../utils/errors";
-import { AuthenticationService } from "../services/AuthenticationService";
-import { isNullOrEmpty } from "../utils/extensions/stringExtensions";
-import { Roles, TokenType, UNAUTHORIZED_RESSOURCE_ERROR, UnauthorizedError } from "common-types";
+import { AuthenticationService } from "@services/AuthenticationService";
+import { Roles, UNAUTHORIZED_RESSOURCE_ERROR, UnauthorizedError } from "common-types";
 
 export class AuthenticationController implements IController {
     public path: string = "/auth";
@@ -20,17 +18,17 @@ export class AuthenticationController implements IController {
         this.router.post(`${this.path}/verify-token`, this.verifyToken);
     }
 
-    private login = async(req: express.Request, res: express.Response) => {
+    private login = async(req: express.Request, res: express.Response, next: NextFunction) => {
         try {
             const { email, password } = req.body;
             const data = await this.authenticationService.login(email, password)
             res.status(200).json(data);
         } catch(err) {
-            convertErrorToHttpResponse(err as Error, req, res);
+            next(err);
         }
     }
 
-    private register = async(req: express.Request, res: express.Response) => {
+    private register = async(req: express.Request, res: express.Response, next: NextFunction) => {
         try {
             const { email, password, firstName, lastName, address, role } = req.body;
 
@@ -41,11 +39,11 @@ export class AuthenticationController implements IController {
 
             res.status(200).json(new_user);
         } catch(err) {
-            convertErrorToHttpResponse(err as Error, req, res);
+            next(err);
         }
     }
 
-    private verifyToken = async(req: express.Request, res: express.Response) => {
+    private verifyToken = async(req: express.Request, res: express.Response, next: NextFunction) => {
         try {
             const authorizationHeader = req.headers.authorization;
             if (!authorizationHeader) {
@@ -55,7 +53,7 @@ export class AuthenticationController implements IController {
             const userSession = await this.authenticationService.verifyToken(token);
             res.status(200).json(userSession);
         } catch(err) {
-            convertErrorToHttpResponse(err as Error, req, res);
+            next(err);
         }
     }
 }

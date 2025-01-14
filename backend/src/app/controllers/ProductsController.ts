@@ -1,10 +1,9 @@
-import express from "express";
-import { convertErrorToHttpResponse } from "../utils/errors";
+import express, { NextFunction } from "express";
 import { IController } from "./IController";
-import { ProductService as ProductsService } from "../services/ProductsService";
-import { auth } from "../middlewares/authMiddleware";
-import { checkRole } from "../middlewares/rbac";
-import { BadRequestError, convertStrToEnumProductSort, INVALID_FIELD_ERROR, ProductFilter, ProductSort, REQUIRED_FIELD_ERROR, Roles } from "common-types";
+import { ProductService as ProductsService } from "@services/ProductsService";
+import { auth } from "@app/middlewares/authMiddleware";
+import { checkRole } from "@app/middlewares/rbac";
+import { convertStrToEnumProductSort, ProductFilter, ProductSort, Roles } from "common-types";
 
 export class ProductsController implements IController {
     public path: string = "/products";
@@ -22,7 +21,7 @@ export class ProductsController implements IController {
         this.router.post(`${this.path}/`, auth, checkRole([Roles.Admin]), this.postProduct)
     }
 
-    private getAllProducts = async(req: express.Request, res: express.Response) => {
+    private getAllProducts = async(req: express.Request, res: express.Response, next: NextFunction) => {
         try {
             // Extraction des paramètres de la query plutôt que du body
             const { limit, offset, nameFilter, priceMin, priceMax, sortBy, sortDesc } = req.query;
@@ -44,11 +43,11 @@ export class ProductsController implements IController {
             const result = await this.productsService.getAllProducts(limitNumber, offsetNumber, filterObject, sortObject);
             return res.status(200).json(result);
         } catch(err) {
-            return convertErrorToHttpResponse(err as Error, req, res);
+            next(err);
         }
     }
 
-    private getProduct = async(req: express.Request, res: express.Response) => {
+    private getProduct = async(req: express.Request, res: express.Response, next: NextFunction) => {
         try {
             const id = parseFloat(req.params.id);
 
@@ -56,11 +55,11 @@ export class ProductsController implements IController {
 
             return res.status(200).json(result);
         } catch(err) {
-            return convertErrorToHttpResponse(err as Error, req, res);
+            next(err);
         }
     }
 
-    private putProduct = async(req: express.Request, res: express.Response) => {
+    private putProduct = async(req: express.Request, res: express.Response, next: NextFunction) => {
         try {
             const id = parseFloat(req.params.id);
             const { name, description, price, imageUrl } = req.body;
@@ -69,18 +68,18 @@ export class ProductsController implements IController {
 
             return res.status(200).json(result);
         } catch(err) {
-            return convertErrorToHttpResponse(err as Error, req, res);
+            next(err);
         }
     }
 
-    private postProduct = async(req: express.Request, res: express.Response) => {
+    private postProduct = async(req: express.Request, res: express.Response, next: NextFunction) => {
         try {
             const { name, description, price, imageUrl } = req.body;
             const result = await this.productsService.addProduct(name, description, price, imageUrl);
 
             return res.status(201).json(result);
         } catch(err) {
-            return convertErrorToHttpResponse(err as Error, req, res);
+            next(err);
         }
     }
 }

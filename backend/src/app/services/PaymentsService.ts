@@ -1,9 +1,8 @@
-import Stripe from 'stripe';
-import { Payment } from '../models/Payment';
-import { BadRequestError, INVALID_FIELD_ERROR, PaymentIntent, UserType } from 'common-types';
+import { Payment } from '@app/models/Payment';
+import { BadRequestError, INVALID_FIELD_ERROR, PaymentIntent } from 'common-types';
 import { OrdersService } from './OrdersService';
 import { StripeService } from './StripeService';
-import { User } from '../models/User';
+import { User } from '@app/models/User';
 import { Op } from 'sequelize';
 
 export class PaymentsService {

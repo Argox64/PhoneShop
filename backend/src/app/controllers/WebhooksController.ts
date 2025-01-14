@@ -1,7 +1,6 @@
-import express from 'express';
-import { WebhooksService } from '../services/WebhooksService';
+import express, { NextFunction } from 'express';
+import { WebhooksService } from '@services/WebhooksService';
 import { IController } from './IController';
-import { convertErrorToHttpResponse } from '../utils/errors';
 
 export class WebhooksController implements IController {
     public path = '/webhooks';
@@ -17,11 +16,11 @@ export class WebhooksController implements IController {
         this.router.post(`${this.path}/stripe`, express.raw({type: 'application/json'}), this.handleStripeWebhook);
     }
 
-    private handleStripeWebhook = async (req: express.Request, res: express.Response) => {
+    private handleStripeWebhook = async (req: express.Request, res: express.Response, next: NextFunction) => {
         try {
             await this.webhooksService.handleStripeWebhook(req, res);
         } catch(err) {
-            return convertErrorToHttpResponse(err as Error, req, res);
+            next(err);
         }
     }
 }

@@ -1,10 +1,9 @@
-import express from 'express';
-import { PaymentsService } from '../services/PaymentsService';
+import express, { NextFunction } from 'express';
+import { PaymentsService } from '@services/PaymentsService';
 import { IController } from './IController';
-import { auth } from "../middlewares/authMiddleware";
-import { checkRole } from "../middlewares/rbac";
+import { auth } from "@app/middlewares/authMiddleware";
+import { checkRole } from "@app/middlewares/rbac";
 import { Roles, ForbiddenError, FORBIDDEN_ERROR } from 'common-types';
-import { convertErrorToHttpResponse } from "../utils/errors";
 
 export class PaymentsController implements IController {
     public path = '/payments';
@@ -20,7 +19,7 @@ export class PaymentsController implements IController {
         this.router.put(`${this.path}/:paymentid`, auth, checkRole([Roles.Admin]), this.updatePaymentStatus);
     }
 
-    private createPaymentIntent = async (req: express.Request, res: express.Response) => {
+    private createPaymentIntent = async (req: express.Request, res: express.Response, next: NextFunction) => {
         try {
             const { amount, currency, orderId } = req.body;
 
@@ -32,19 +31,19 @@ export class PaymentsController implements IController {
             else
                 throw new ForbiddenError(FORBIDDEN_ERROR, {});
 
-        } catch (error) {
-            return convertErrorToHttpResponse(error as Error, req, res);
+        } catch (err) {
+            next(err);
         }
     }
 
-    private updatePaymentStatus = async (req: express.Request, res: express.Response) => {
+    private updatePaymentStatus = async (req: express.Request, res: express.Response, next: NextFunction) => {
         try {
             const { paymentIntentId: paymentId } = req.params;
             const { status } = req.body;
             const result = await this.paymentsService.updatePaymentStatus(paymentId, status);
             return res.status(200).json(result);
-        } catch (error) {
-            return convertErrorToHttpResponse(error as Error, req, res);
+        } catch (err) {
+            next(err);
         }
     }
 }

@@ -1,5 +1,5 @@
 import express from 'express';
-import { convertErrorToHttpResponse } from '../utils/errors';
+import { convertErrorToHttpResponse } from '@app/utils/errors';
 import { FORBIDDEN_ERROR, ForbiddenError, Roles } from 'common-types';
 
 //https://nikitrauniyar.medium.com/role-based-access-control-rbac-in-node-js-typescript-c00417703ad0

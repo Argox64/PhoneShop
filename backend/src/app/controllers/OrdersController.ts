@@ -1,10 +1,9 @@
-import express, { Router } from "express";
+import express, { NextFunction } from "express";
 import { IController } from "./IController";
-import { convertErrorToHttpResponse } from "../utils/errors";
-import { OrdersService } from "../services/OrdersService";
-import { auth } from "../middlewares/authMiddleware";
-import { checkRole } from "../middlewares/rbac";
-import { BadRequestError, FORBIDDEN_ERROR, ForbiddenError, INVALID_FIELD_ERROR, REQUIRED_FIELD_ERROR, Roles, convertStrToEnumRoles } from "common-types";
+import { OrdersService } from "@services/OrdersService";
+import { auth } from "@app/middlewares/authMiddleware";
+import { checkRole } from "@app/middlewares/rbac";
+import { FORBIDDEN_ERROR, ForbiddenError, Roles } from "common-types";
 
 export class OrdersController implements IController {
     public path: string = "/orders";
@@ -21,7 +20,7 @@ export class OrdersController implements IController {
         this.router.post(`${this.path}`, auth, checkRole([Roles.Admin, Roles.Customer]), this.addOrder);
     }
 
-    private getOrdersByUserId = async(req: express.Request, res: express.Response) => {
+    private getOrdersByUserId = async(req: express.Request, res: express.Response, next: NextFunction) => {
         try {
             //const { clientUID } = req.params;
             if(req.session.user) {
@@ -32,11 +31,11 @@ export class OrdersController implements IController {
             else
                 throw new ForbiddenError(FORBIDDEN_ERROR, {});
         } catch(err) {
-            return convertErrorToHttpResponse(err as Error, req, res);
+            next(err);
         }
     }
 
-    private addOrder = async(req: express.Request, res: express.Response) => {
+    private addOrder = async(req: express.Request, res: express.Response, next: NextFunction) => {
         try {
             const { orderDetails, totalPrice } = req.body; // Assurez-vous que le corps de la requête contient les bonnes données
             if(req.session.user) {
@@ -47,11 +46,11 @@ export class OrdersController implements IController {
             }
             else
                 throw new ForbiddenError(FORBIDDEN_ERROR, {});
-        } catch (error) {
-            return convertErrorToHttpResponse(error as Error, req, res);
+        } catch (err) {
+            next(err);
         }
     }
-    private getOrder = async(req: express.Request, res: express.Response) => {
+    private getOrder = async(req: express.Request, res: express.Response, next: NextFunction) => {
         try {
             const { orderId } = req.params;
             const { includeProducts } = req.query;
@@ -62,8 +61,8 @@ export class OrdersController implements IController {
             }
             else
                 throw new ForbiddenError(FORBIDDEN_ERROR, {});
-        } catch (error) {
-            return convertErrorToHttpResponse(error as Error, req, res);
+        } catch (err) {
+            next(err);
         }
     }
 }

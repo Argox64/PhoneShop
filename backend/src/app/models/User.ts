@@ -1,7 +1,7 @@
-import { AllowNull, Column, DataType, Default, HasMany, HasOne, Model, PrimaryKey, Table } from "sequelize-typescript";
+import { AllowNull, Column, DataType, Default, HasMany, Model, PrimaryKey, Table } from "sequelize-typescript";
 import { Order } from "./Order";
 import { Roles, UserType, VALIDATION_EMAIL_ERROR, VALIDATION_NOT_EMPTY_ERROR, VALIDATION_NOT_NULL_ERROR } from "common-types";
-import { IModel } from "../utils/IModels";
+import { IModel } from "@app/utils/IModels";
 
 @Table
 export class User extends Model implements IModel<UserType> {

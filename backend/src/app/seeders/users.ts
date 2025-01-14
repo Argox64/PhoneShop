@@ -1,5 +1,5 @@
 import { Op } from "sequelize";
-import { User } from "../models/User";
+import { User } from "@app/models/User";
 import { AuthenticationService } from "../services/AuthenticationService";
 import { Roles } from "common-types";
 

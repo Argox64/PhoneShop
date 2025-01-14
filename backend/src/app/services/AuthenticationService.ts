@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'; // Assurez-vous d'importer la bibliothèque jsonwebtoken
 import { FindOptions, Op, WhereOptions } from 'sequelize';
-import { User } from '../models/User';
-import Authentication from '../utils/Authentication';
+import { User } from '@app/models/User';
+import Authentication from '@app/utils/Authentication';
 import { convertStrToEnumRoles, rolePermissions, Roles, SessionUser, INVALID_FIELD_ERROR, UNAUTHORIZED_RESSOURCE_ERROR, FORBIDDEN_ERROR, UserType, UnauthorizedError, BadRequestError, ConflictError, ForbiddenError, TokenSessionUser, USER_ALREADY_EXISTS_ERROR } from 'common-types';
 
 export class AuthenticationService {

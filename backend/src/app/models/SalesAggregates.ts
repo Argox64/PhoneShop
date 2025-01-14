@@ -1,6 +1,6 @@
 import { Table, Column, Model, DataType, ForeignKey, BelongsTo } from 'sequelize-typescript';
 import { Product } from './Product';
-import { IModel } from '../utils/IModels';
+import { IModel } from '@app/utils/IModels';
 import { SalesAggregatesType } from 'common-types';
 
 @Table

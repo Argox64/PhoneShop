@@ -1,6 +1,6 @@
 import { ProductType, VALIDATION_EMAIL_ERROR, VALIDATION_NOT_NULL_ERROR } from "common-types";
 import { AllowNull, AutoIncrement, Column, DataType, HasMany, HasOne, Model, PrimaryKey, Table } from "sequelize-typescript";
-import { IModel } from "../utils/IModels";
+import { IModel } from "@app/utils/IModels";
 import { OrderDetail } from "./OrderDetail";
 import { SalesAggregates } from "./SalesAggregates";
 

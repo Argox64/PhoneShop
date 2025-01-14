@@ -10,13 +10,14 @@ import sequelize from './db';
 import session from 'express-session';
 import { AuthenticationService } from './services/AuthenticationService';
 import { Roles } from 'common-types';
+import { errorHandler } from './middlewares/errorHandler';
 
 export class App {
   public app: express.Application;
   public port: number;
   public env: string;
- 
-  constructor(webHooksController: IController, controllers : IController[], port: number, env: string) {
+
+  constructor(webHooksController: IController, controllers: IController[], port: number, env: string) {
     this.app = express();
     this.port = port;
     this.env = env;
@@ -25,14 +26,15 @@ export class App {
       res.send("Welcome to our Online Shop API...");
     });
     this.app.use('/', webHooksController.router);
-    
+
     this.initializeDB();
-    this.initializeMiddlewares();
+    this.initializeMiddlewaresBefore();
     this.initializeControllers(controllers);
+    this.initializeMiddlewaresAfter();
   }
 
   private initializeDB() {
-    if(this.env == "development") {
+    if (this.env == "development") {
       sequelize().sync(/*{force: true}*/).then(() => {
         this.createAdminUserIfNoAdmin();
         productUp();
@@ -41,52 +43,57 @@ export class App {
     }
     else {
       sequelize().authenticate()
-      .then(() => {
-        console.log("Connection to database has been established successfully.")
-      })
-      .catch((err) => {
-        console.log("Unable to connect to database : ", err)
-      })
+        .then(() => {
+          console.log("Connection to database has been established successfully.")
+        })
+        .catch((err) => {
+          console.log("Unable to connect to database : ", err)
+        })
     }
   }
 
   private async createAdminUserIfNoAdmin() {
     const authService = new AuthenticationService();
-    if(await authService.countUserWithRole(Roles.Admin) < 1) {
-      if(process.env.DEFAULT_ADMIN_EMAIL && process.env.DEFAULT_ADMIN_PASSWORD)
-      authService.register(process.env.DEFAULT_ADMIN_EMAIL, process.env.DEFAULT_ADMIN_PASSWORD, "Admin", "Admin", "Address", Roles.Admin, Roles.Admin);
+    if (await authService.countUserWithRole(Roles.Admin) < 1) {
+      if (process.env.DEFAULT_ADMIN_EMAIL && process.env.DEFAULT_ADMIN_PASSWORD)
+        authService.register(process.env.DEFAULT_ADMIN_EMAIL, process.env.DEFAULT_ADMIN_PASSWORD, "Admin", "Admin", "Address", Roles.Admin, Roles.Admin);
     }
   }
- 
-  private initializeMiddlewares() {
+
+  private initializeMiddlewaresBefore() {
     this.app
-        .use(express.json())
-        .use(express.urlencoded({ extended: true }))
-        .use(cors())
-        .use(i18nextMiddleware.handle(i18n))
-        .use(session({
-          secret: process.env.SESSION_SECRET || "VERY_STRONG_SESSION_SECRET",
-          resave: false,
-          saveUninitialized: true,
-          cookie: {
-            secure: process.env.NODE_ENV === "production",
-            //httpOnly: true,
-            maxAge: 1000 * 60 * 15
-          } // true if in production
-        }))
+      .use(express.json())
+      .use(express.urlencoded({ extended: true }))
+      .use(cors())
+      .use(i18nextMiddleware.handle(i18n))
+      .use(session({
+        secret: process.env.SESSION_SECRET || "VERY_STRONG_SESSION_SECRET",
+        resave: false,
+        saveUninitialized: true,
+        cookie: {
+          secure: process.env.NODE_ENV === "production",
+          httpOnly: process.env.NODE_ENV === "production",
+          maxAge: 1000 * 60 * 15
+        }
+      }));
   }
- 
-  private initializeControllers(controllers : IController[]) {
+
+  private initializeMiddlewaresAfter() {
+    this.app
+      .use(errorHandler);
+  }
+
+  private initializeControllers(controllers: IController[]) {
     controllers.forEach((controller) => {
       this.app.use('/', controller.router);
     });
   }
- 
+
   public listen() {
     this.app.listen(this.port, () => {
       console.log(`App listening on the port ${this.port}`);
     });
   }
 }
- 
+
 export default App;

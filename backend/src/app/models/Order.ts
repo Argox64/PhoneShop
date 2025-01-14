@@ -1,10 +1,9 @@
-import { AfterCreate, AfterUpdate, AllowNull, AutoIncrement, BeforeCreate, BelongsTo, Column, DataType, ForeignKey, HasMany, HasOne, Model, PrimaryKey, Table } from "sequelize-typescript";
+import { AfterUpdate, AllowNull, AutoIncrement, BelongsTo, Column, DataType, ForeignKey, HasMany, Model, PrimaryKey, Table } from "sequelize-typescript";
 import { OrderDetail } from "./OrderDetail";
 import { User } from "./User";
 import { OrderStatus, OrderType, VALIDATION_NOT_NULL_ERROR } from "common-types";
-import { IModel } from "../utils/IModels";
+import { IModel } from "@app/utils/IModels";
 import {Payment} from "./Payment";
-import { SalesAggregates } from "./SalesAggregates";
 
 @Table
 export class Order extends Model implements IModel<OrderType>{

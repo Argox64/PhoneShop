@@ -1,6 +1,6 @@
-import { Table, Column, Model, DataType, PrimaryKey, AutoIncrement, AllowNull, Unique, CreatedAt, UpdatedAt, ForeignKey, BelongsTo } from 'sequelize-typescript';
+import { Table, Column, Model, DataType, PrimaryKey, AutoIncrement, AllowNull, Unique, ForeignKey, BelongsTo } from 'sequelize-typescript';
 import { Order } from './Order';
-import { IModel } from '../utils/IModels';
+import { IModel } from '@app/utils/IModels';
 import { PaymentType } from 'common-types';
 
 @Table({

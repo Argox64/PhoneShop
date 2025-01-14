@@ -1,8 +1,6 @@
 import express from "express";
-import jwt from "jsonwebtoken"
-import { convertErrorToHttpResponse } from "../utils/errors";
-//import { SessionUser } from "../utils/extensions/sessionData";
-import { AuthenticationService } from "../services/AuthenticationService";
+import { convertErrorToHttpResponse } from "@app/utils/errors";
+import { AuthenticationService } from "@services/AuthenticationService";
 import { SessionUser, UNAUTHORIZED_RESSOURCE_ERROR, UnauthorizedError } from "common-types";
 
 export const auth = async(req: express.Request, res: express.Response, next: express.NextFunction): Promise<any> => {

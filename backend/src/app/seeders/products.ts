@@ -1,5 +1,5 @@
 import { Op } from "sequelize";
-import { Product } from "../models/Product";
+import { Product } from "@app/models/Product";
 
 const seed_products = [
     {

@@ -32,7 +32,6 @@ export const SearchBar: React.FC = () => {
           const results = await ProductsService.getAllProducts(RESULTS_MAX_LENGTH, undefined, { nameFilter: query});
           const products = results.data.data as ProductType[];
           setSearchResults(products);
-          console.log("Search results: ", products);
         } 
         catch (error) {
           console.error("Failed to fetch search results");

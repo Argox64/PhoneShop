@@ -7,19 +7,21 @@ import OrderIcon from '@mui/icons-material/Receipt';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useSession } from '../contexts/AuthProvider';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
-import { useCart } from '../contexts/CartContext';
 import { useEvent } from '../contexts/EventContext';
 import { useEffect, useState } from 'react';
 import { motion, useAnimation } from 'framer-motion';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
 
-interface IAppBarProps {}
+interface IAppBarProps { }
 
 const CustomAppBar: React.FC<IAppBarProps> = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const { isAuthenticated, logout } = useSession();
-  const { cart } = useCart();
+  //const { cart } = useCart();
+  const cartItems = useSelector((state: RootState) => state.cart.items);
   const { onAddToCart } = useEvent();
   const controls = useAnimation();
 
@@ -78,7 +80,7 @@ const CustomAppBar: React.FC<IAppBarProps> = () => {
 
   return (
     <>
-      <AppBar position="fixed" sx={{height: 64}}>
+      <AppBar position="fixed" sx={{ height: 64 }}>
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             <Link component={RouterLink} to={'/'} underline='none' color='secondary.main'>E-Store</Link>
@@ -89,7 +91,7 @@ const CustomAppBar: React.FC<IAppBarProps> = () => {
 
           {/* Icône du panier */}
           <IconButton id='cart-icon' color='inherit' onClick={handleNavigateToCart}>
-            <Badge badgeContent={cart.reduce((total, item) => total + item.quantity, 0)} color="error">
+            <Badge badgeContent={cartItems.reduce((total, item) => total + item.quantity, 0)} color="error">
               <motion.div animate={controls}>
                 <ShoppingCartIcon />
               </motion.div>
@@ -101,8 +103,8 @@ const CustomAppBar: React.FC<IAppBarProps> = () => {
             onMouseEnter={handleAccountMouseEnter}
             onMouseLeave={handleAccountMouseLeave}
           >
-            <IconButton 
-              color="inherit" 
+            <IconButton
+              color="inherit"
               onClick={handleNavigateToAccount}>
               <AccountCircleIcon />
             </IconButton>

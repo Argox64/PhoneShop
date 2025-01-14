@@ -16,7 +16,7 @@ const CustomerDetails: React.FC = () => (
         />
         <Box>
           <Typography variant="body1" fontWeight="bold" color="text.primary">
-            David Kent
+            Customer Name
           </Typography>
           <Typography variant="body2" color="text.secondary">
             10 Previous Orders
@@ -31,7 +31,7 @@ const CustomerDetails: React.FC = () => (
           sx={{ height: 24, width: 24, objectFit: "contain" }}
         />
         <Typography variant="body2" color="text.secondary" sx={{ cursor: 'pointer' }}>
-          david89@gmail.com
+          customer@gmail.com
         </Typography>
       </Box>
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4, mt: 2 }}>

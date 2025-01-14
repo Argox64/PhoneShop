@@ -27,7 +27,6 @@ const CheckoutComplete: React.FC = () => {
         setLoading(false);
         if(result.status === 200) {
           const order : OrderType = result.data;
-          console.log(typeof order.totalPrice)
           setOrderSummary(order);
         }
       });

@@ -1,5 +1,5 @@
 import { AuthentificationCalls, SessionUser, TokenSessionUser, TokenType } from 'common-types';
-import { CallResponse } from 'common-types/src/calls/CallResponse';
+import { CallResponse } from 'common-types';
 
 const BASE_URL = (import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000');
 

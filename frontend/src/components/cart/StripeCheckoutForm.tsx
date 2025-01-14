@@ -21,7 +21,7 @@ const StripeCheckoutForm: React.FC<CheckoutFormProps> = (props) => {
     const { error: submitError } = await elements.submit();
     if (submitError?.message) {
       // Show error to your customer
-      console.log(submitError.message);
+      //console.log(submitError.message);
       return;
     }
 

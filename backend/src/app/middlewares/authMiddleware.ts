@@ -3,6 +3,8 @@ import { convertErrorToHttpResponse } from "@app/utils/errors";
 import { AuthenticationService } from "@services/AuthenticationService";
 import { SessionUser, UNAUTHORIZED_RESSOURCE_ERROR, UnauthorizedError } from "common-types";
 
+const authenticationService = new AuthenticationService();
+
 export const auth = async(req: express.Request, res: express.Response, next: express.NextFunction): Promise<any> => {
     try {
         if(!req.headers.authorization) {
@@ -12,7 +14,7 @@ export const auth = async(req: express.Request, res: express.Response, next: exp
 
         const token: string = req.headers.authorization.split(" ")[1];
         
-        const user: SessionUser = await new AuthenticationService().verifyToken(token);
+        const user: SessionUser = await authenticationService.verifyToken(token);
         req.session.user = user;
         return next();
     } catch(err) {

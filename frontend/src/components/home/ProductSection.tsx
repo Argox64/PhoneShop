@@ -27,36 +27,31 @@ const ProductsSection: React.FC<ProductsSectionProps> = (props) => {
   const isMdOrLess = useMediaQuery(theme.breakpoints.down('md'));
   const navigate = useNavigate();
 
-  //const isXs = useMediaQuery(theme.breakpoints.only('xs'));
-  //const isMd = useMediaQuery(theme.breakpoints.only('md'));
-  //const isLgOrMore = useMediaQuery(theme.breakpoints.up('lg'));
-
   useEffect(() => {
     addProducts(itemPerPage * nbPagesPerLoad - 1);
   }, []);
 
   const getProducts = async (limit: number, offset: number): Promise<ProductsSearchData> => {
-    try {
-      const products = await ProductsService.getAllProducts(limit, offset, {}, sort);
-      return products.data;
-    } catch (error) {
-      console.error("Failed to fetch orders", error);
-      throw error;
-    }
+    const products = await ProductsService.getAllProducts(limit, offset, {}, sort);
+    return products.data;
   }
 
   const addProducts = (nbProducts: number) => {
     if (totalProductsInSearch <= products.length)
       return;
 
-    const productsPromise = getProducts(nbProducts, products.length);
-    productsPromise.then((prods) => {
-      let products_new: ProductType[] = []
-      products_new = products_new.concat(products).concat(prods.data);
-      setProducts(products_new);
-      setTotalProductsInSearch(prods.totalCount)
-      console.log(totalProductsInSearch, products.length)
-    });
+    try {
+      const productsPromise = getProducts(nbProducts, products.length);
+      productsPromise.then((prods) => {
+        let products_new: ProductType[] = []
+        products_new = products_new.concat(products).concat(prods.data);
+        setProducts(products_new);
+        setTotalProductsInSearch(prods.totalCount)
+      });
+    } catch (error) {
+      console.error("Failed to fetch orders", error);
+      throw error;
+    }
   }
 
   const phoneCardWidthPx = 250;
@@ -66,7 +61,6 @@ const ProductsSection: React.FC<ProductsSectionProps> = (props) => {
     if (selectedPhonesIndex >= Math.ceil(products.length / itemPerPage) - 1) return;
 
     setSelectedPhonesIndex((prevIndex) => (prevIndex + 1) % (Math.ceil(products.length / itemPerPage)));
-    console.log(totalProductsInSearch, products.length)
   };
 
   const handlePrev = () => {
@@ -108,7 +102,7 @@ const ProductsSection: React.FC<ProductsSectionProps> = (props) => {
                 transition={{ type: 'spring', stiffness: 500, damping: 30 }}
               >
                 {products.map((product) => (
-                  <Card key={product.id}
+                  product && <Card key={product.id}
                     onClick={() => handleCardClick(product.id)}
                     sx={{
                       transition: 'transform 0.3s, box-shadow 0.3s',
@@ -172,7 +166,7 @@ const ProductsSection: React.FC<ProductsSectionProps> = (props) => {
                   disabled={selectedPhonesIndex >= Math.ceil(products.length / itemPerPage) - 1}
                   sx={{ position: "absolute", right: 0, top: "50%", transform: "translateY(-50%)" }}
                 >
-                  <ArrowForwardIos/>
+                  <ArrowForwardIos />
                 </IconButton>
               </>
             )}

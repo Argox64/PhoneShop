@@ -19,9 +19,11 @@ import {
 } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { useCart } from '@/components/contexts/CartContext';
 import { styled } from '@mui/system';
 import { CartItem } from "@/types/CartItem";
+import { useDispatch, useSelector } from "react-redux";
+import { removeItemFromCart, updateItemQuantity } from '@/store/slice/cartSlice';
+import { RootState } from "@/store/store";
 
 // Style personnalisé pour masquer les spinners
 const NoSpinnerTextField = styled(TextField)({
@@ -40,39 +42,15 @@ const NoSpinnerTextField = styled(TextField)({
 });
 
 const CartItems: React.FC = () => {
-  const { cart, addItem, removeItem, deleteItem, getItemQuantity, setItem } = useCart();
-  const [open, setOpen] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState<CartItem | null>(null);
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state: RootState) => state.cart.items);
   const [quantityInputs, setQuantityInputs] = useState<{ [key: string]: string }>({});
-
-  const handleOpenDialog = (item: CartItem) => {
-    setItemToDelete(item);
-    setOpen(true);
-  };
-
-  const handleCloseDialog = () => {
-    setOpen(false);
-    setItemToDelete(null);
-  };
-
-  const handleConfirmDelete = () => {
-    if (itemToDelete) {
-      deleteItem(itemToDelete);
-    }
-    handleCloseDialog();
-  };
 
   const handleQuantityChange = (item: CartItem, value: string) => {
     if (/^\d*$/.test(value)) {
       const quantity = parseInt(value, 10);
       if (quantity > 0) {
-        setItem(item, quantity);
-        setQuantityInputs((prev) => ({
-          ...prev,
-          [item.id]: value,
-        }));
-      } else if (quantity === 0) {
-        handleOpenDialog(item);
+        dispatch(updateItemQuantity({ id: item.id, quantity }));
       }
     }
   };
@@ -81,24 +59,23 @@ const CartItems: React.FC = () => {
     const value = quantityInputs[item.id];
     const quantity = parseInt(value, 10);
     if (quantity > 0) {
-      setItem(item, quantity);
-    } else if (quantity === 0) {
-      handleOpenDialog(item);
+      dispatch(updateItemQuantity({ id: item.id, quantity }));
     }
   };
 
-  const handleDecreaseQuantity = (item: CartItem, quantity: number) => {
-    if (getItemQuantity(item) - quantity <= 0) {
-      handleOpenDialog(item);
-    } else {
-      removeItem(item, quantity);
-    }
+  const handleUpdateQuantity = (item: CartItem, quantity: number) => {
+    quantity = item.quantity + quantity;
+    dispatch(updateItemQuantity({ id: item.id, quantity }));
   };
+
+  const handleRemoveItem = (item: CartItem) => {
+    dispatch(removeItemFromCart(item.id));
+  }
 
   return (
     <>
       <Card sx={{ bgcolor: 'background.paper', p: { xs: 2, md: 4 } }}>
-        {cart.length === 0 ? (
+        {cartItems.length === 0 ? (
           <Box sx={{ textAlign: 'center', p: 4 }}>
             <ShoppingCartIcon sx={{ fontSize: 60, color: 'grey.500' }} />
             <Typography variant="h6" color="text.secondary" gutterBottom>
@@ -110,7 +87,7 @@ const CartItems: React.FC = () => {
           </Box>
         ) : (
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            {cart.map((item, index) => (
+            {cartItems.map((item, index) => (
               <Box key={item.id}>
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={4}>
@@ -118,12 +95,12 @@ const CartItems: React.FC = () => {
                       component="img"
                       image={item.imageUrl}
                       alt={item.name}
-                      sx={{ 
-                        maxHeight: { xs: 150, sm: 200 }, 
-                        maxWidth: { xs: 150, sm: 200 }, 
-                        height: 'auto', 
-                        width: 'auto', 
-                        objectFit: 'contain', 
+                      sx={{
+                        maxHeight: { xs: 150, sm: 200 },
+                        maxWidth: { xs: 150, sm: 200 },
+                        height: 'auto',
+                        width: 'auto',
+                        objectFit: 'contain',
                         margin: 'auto'
                       }}
                     />
@@ -148,7 +125,7 @@ const CartItems: React.FC = () => {
                         ${item.price.toFixed(2)} <span style={{ textDecoration: 'line-through', color: '#E57373' }}>${item.price.toFixed(2)}</span>
                       </Typography>
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <Button size="small" onClick={() => handleDecreaseQuantity(item, 1)}>-</Button>
+                        <Button size="small" onClick={() => handleUpdateQuantity(item, -1)} disabled={item.quantity <= 1}>-</Button>
                         <NoSpinnerTextField
                           type="number"
                           value={quantityInputs[item.id] || item.quantity.toString()}
@@ -157,13 +134,13 @@ const CartItems: React.FC = () => {
                           inputProps={{ min: 0 }}
                           sx={{ width: 50 }}
                         />
-                        <Button size="small" onClick={() => addItem(item, 1)}>+</Button>
+                        <Button size="small" onClick={() => handleUpdateQuantity(item, 1)}>+</Button>
                       </Box>
                       <Typography variant="body1" fontWeight="bold" color="text.primary">
                         ${(item.price * item.quantity).toFixed(2)}
                       </Typography>
                       <IconButton
-                        onClick={() => handleOpenDialog(item)}
+                        onClick={() => handleRemoveItem(item)}
                         sx={{
                           transition: 'transform 0.2s',
                           '&:hover': { transform: 'scale(1.2)' }
@@ -174,14 +151,14 @@ const CartItems: React.FC = () => {
                     </CardActions>
                   </Grid>
                 </Grid>
-                {index < cart.length - 1 && <Divider sx={{ my: 2 }} />}
+                {index < cartItems.length - 1 && <Divider sx={{ my: 2 }} />}
               </Box>
             ))}
           </Box>
         )}
       </Card>
 
-      <Dialog
+      {/*<Dialog
         open={open}
         onClose={handleCloseDialog}
         aria-labelledby="alert-dialog-title"
@@ -201,7 +178,7 @@ const CartItems: React.FC = () => {
             Confirm
           </Button>
         </DialogActions>
-      </Dialog>
+      </Dialog>*/}
     </>
   );
 };

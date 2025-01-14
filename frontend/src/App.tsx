@@ -2,10 +2,12 @@ import "./App.css";
 import { Box, createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import AppRoutes from "./Routes";
 import { SessionProvider } from "./components/contexts/AuthProvider";
-import { CartProvider } from "./components/contexts/CartContext";
 import { GlobalLoader } from "./components/main/GlobalLoader";
 import { LoaderProvider } from "./components/contexts/LoaderProvider";
 import { EventProvider } from "./components/contexts/EventContext";
+import { Provider } from "react-redux";
+import { store, persistor } from "./store/store";
+import { PersistGate } from "redux-persist/integration/react";
 
 const theme = createTheme({
   palette: {
@@ -42,18 +44,20 @@ function App() {
     <>
       <CssBaseline />
       <ThemeProvider theme={theme}>
-        <LoaderProvider>
-          <SessionProvider> 
-            <EventProvider>       
-              <CartProvider>
-              <Box sx={{ paddingTop: '64px' }}>
-                <GlobalLoader />
-                <AppRoutes />
-              </Box>
-              </CartProvider>
-            </EventProvider>
-          </SessionProvider>
-        </LoaderProvider>
+        <Provider store={store}>
+          <PersistGate loading={<div>Loading...</div>} persistor={persistor}>
+            <LoaderProvider>
+              <SessionProvider>
+                <EventProvider>
+                  <Box sx={{ paddingTop: '64px' }}>
+                    <GlobalLoader />
+                    <AppRoutes />
+                  </Box>
+                </EventProvider>
+              </SessionProvider>
+            </LoaderProvider>
+          </PersistGate>
+        </Provider>
       </ThemeProvider>
     </>
   );

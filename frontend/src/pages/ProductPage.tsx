@@ -12,9 +12,11 @@ import { styled } from '@mui/system';
 import { ProductType } from 'common-types';
 import ProductsService from '@/services/ProductsService';
 import NotFoundPage from './NotFoundPage';
-import { useCart } from '@/components/contexts/CartContext';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import { useDispatch } from 'react-redux';
+import { addItemToCart } from '@/store/slice/cartSlice';
+import { CartItem } from '@/types/CartItem';
 
 // Styles for the image container
 const ImageContainer = styled('div')(({ theme }) => ({
@@ -44,10 +46,10 @@ const SizeButton = styled(Button)(({ theme }) => ({
 
 const ProductPage: React.FC = () => {
   const theme = useTheme();
+  const dispatch = useDispatch();
   const { productId } = useParams<{ productId: string }>();
   const [notFound, setNotFound] = useState<boolean>(false);
   const [product, setProduct] = useState<ProductType | null>(null);
-  const { addItem } = useCart();
 
   useEffect(() => {
     getProduct();
@@ -83,7 +85,9 @@ const ProductPage: React.FC = () => {
 
   const handleAddToCart = () => {
     if (product) {
-      addItem(product, 1);
+      let item = product as CartItem;
+      item.quantity = 1;
+      dispatch(addItemToCart(item));
     }
   }
 

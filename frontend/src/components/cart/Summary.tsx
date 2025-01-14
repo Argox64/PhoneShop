@@ -1,10 +1,14 @@
 import React from "react";
 import { Card, Typography, Divider, Box } from "@mui/material";
-import { useCart } from '@/components/contexts/CartContext';
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+//import { useCart } from '@/components/contexts/CartContext';
 
 const Summary: React.FC = () => {
-  const { cart } = useCart();
-  const subtotal = cart.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2);
+  //const { cart } = useCart();
+  //const dispatch = useDispatch();
+  const cartItems = useSelector((state: RootState) => state.cart.items);
+  const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2);
   const discount = 28.00; 
   const shipping = 8.00; 
   const total = (parseFloat(subtotal)).toFixed(2);

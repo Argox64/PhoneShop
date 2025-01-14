@@ -9,20 +9,25 @@ import CartItems from '@/components/cart/CartItems';
 import CustomerDetails from '@/components/cart/CustomerDetails';
 import ShippingDetails from '@/components/cart/ShippingDetails';
 import StripeCheckout from '@/components/cart/StripeCheckout';
-import { useCart } from '@/components/contexts/CartContext';
+//import { useCart } from '@/components/contexts/CartContext';
 import { useSession } from '@/components/contexts/AuthProvider';
 import OrdersService from '@/services/OrdersService';
 import { NewOrderDetail } from 'common-types';
 import { PaymentsService } from '@/services/PaymentsService';
+import { useDispatch, useSelector } from 'react-redux';
+import { clearCart } from '@/store/slice/cartSlice';
+import { RootState } from '@/store/store';
 
 const CartPage: React.FC = () => {
   const [step, setStep] = useState(1);
   const [clientSecret, setClientSecret] = useState('');
   const [orderId, setOrderId] = useState(0);
-  const { cart, reset: resetCart } = useCart();
+  //const { cart, reset: resetCart } = useCart();
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state: RootState) => state.cart.items);
   const { token } = useSession();
 
-  const subtotal: number = parseFloat(cart.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2));
+  const subtotal: number = parseFloat(cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2));
   const totalPrice: number = parseFloat(subtotal.toFixed(2));
 
   const handleNextStep = () => {
@@ -35,7 +40,7 @@ const CartPage: React.FC = () => {
 
   const handleToPayment = async () => {
     try {
-      const orderDetails: NewOrderDetail[] = cart.map(item => ({
+      const orderDetails: NewOrderDetail[] = cartItems.map(item => ({
         productId: item.id,
         quantity: item.quantity
       }));
@@ -45,7 +50,7 @@ const CartPage: React.FC = () => {
       const order = orderResult.data;
       setOrderId(order.id);
 
-      resetCart();
+      dispatch(clearCart());
 
       const paymentResult = await PaymentsService.createPaymentIntent(token.token, order.totalPrice, "usd", order.id);
       if(paymentResult.status !== 201) 
@@ -106,7 +111,7 @@ const CartPage: React.FC = () => {
             variant="contained"
             color="primary"
             onClick={handleNextStep}
-            disabled={cart.length === 0}
+            disabled={cartItems.length === 0}
             sx={{
               position: 'fixed',
               bottom: 16,
@@ -136,7 +141,7 @@ const CartPage: React.FC = () => {
               variant="contained"
               color="primary"
               onClick={handleNextStep}
-              disabled={cart.length === 0}
+              disabled={cartItems.length === 0}
               sx={{
                 width: '50%',
                 maxWidth: '300px',
